@@ -156,5 +156,5 @@ function removeTaskFromLocalStorage(taskItem) {
 
 // clear tasks from local storage
 function clearTasksFromLocalStorage() {
-  localStorage.setItem('tasks', '[]');
+  localStorage.clear();
 }
