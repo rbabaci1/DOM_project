@@ -10,6 +10,9 @@ loadEventListeners();
 
 // Function
 function loadEventListeners() {
+  // DOM load event
+  document.addEventListener('DOMContentLoaded', getTasks);
+
   // add task event
   form.addEventListener('submit', addTask);
   // remove task event
@@ -18,6 +21,36 @@ function loadEventListeners() {
   clearBtn.addEventListener('click', clearTasks);
   // filter tasks event
   filter.addEventListener('keyup', filterTasks);
+}
+
+// get tasks from local storage
+function getTasks() {
+  let tasks;
+
+  if (localStorage.getItem('tasks') === null) {
+    tasks = [];
+  } else {
+    tasks = JSON.parse(localStorage.getItem('tasks'));
+  }
+
+  tasks.forEach(task => {
+    // Create li element
+    const li = document.createElement('li');
+    // add class
+    li.className = 'collection-item';
+    // create text node and append to to the li
+    li.appendChild(document.createTextNode(task));
+    // Create new link element
+    const link = document.createElement('a');
+    // add class
+    link.className = 'delete-item secondary-content';
+    // add icon html
+    link.innerHTML = '<i class="fa fa-remove"></i>';
+    // append link to the li
+    li.appendChild(link);
+    // append the li to the ul
+    taskList.appendChild(li);
+  });
 }
 
 function addTask(e) {
@@ -44,6 +77,10 @@ function addTask(e) {
   li.appendChild(link);
   // append the li to the ul
   taskList.appendChild(li);
+
+  // store in localStorage
+  storeTaskInLocalStorage(taskInput.value);
+
   // clear the input
   taskInput.value = '';
 }
@@ -71,13 +108,24 @@ function filterTasks(e) {
 
   document.querySelectorAll('.collection-item').forEach(task => {
     const item = task.firstChild.textContent;
-
     if (item.toLocaleLowerCase().indexOf(text) !== -1) {
       task.style.display = 'block';
     } else {
       task.style.display = 'none';
     }
   });
+}
 
-  console.log(text);
+// store task in localStorage
+function storeTaskInLocalStorage(taskValue) {
+  let tasks;
+
+  if (localStorage.getItem('tasks') === null) {
+    tasks = [];
+  } else {
+    tasks = JSON.parse(localStorage.getItem('tasks'));
+  }
+
+  tasks.push(taskValue);
+  localStorage.setItem('tasks', JSON.stringify(tasks));
 }
