@@ -103,6 +103,9 @@ function clearTasks() {
   while (taskList.firstChild) {
     taskList.removeChild(taskList.firstChild);
   }
+
+  // Clear form local storage
+  clearTasksFromLocalStorage();
 }
 
 // filter tasks
@@ -149,4 +152,9 @@ function removeTaskFromLocalStorage(taskItem) {
   });
 
   localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+// clear tasks from local storage
+function clearTasksFromLocalStorage() {
+  localStorage.setItem('tasks', '[]');
 }
